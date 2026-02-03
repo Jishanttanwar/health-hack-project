@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindMate - Your Mental Wellness Companion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link rel="stylesheet" href="mindmate.css">
+
+    
+</head>
+<body>
+    <div class="animated-bg">
+        <div class="blob blob1"></div>
+        <div class="blob blob2"></div>
+        <div class="blob blob3"></div>
+    </div>
+
+    <div class="toast" id="toast">Saved locally ✔️</div>
+
+    <div class="container">
+        <!-- HERO SECTION -->
+        <section class="hero">
+            <h1>MindMate</h1>
+            <p>Your private daily mental wellness companion</p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary" onclick="scrollToSection('checkin')">Start Check-in</button>
+                <button class="btn btn-secondary" onclick="scrollToSection('calm')">Try Breathing</button>
+                <button class="btn btn-secondary" onclick="scrollToSection('insights')">View Insights</button>
+            </div>
+        </section>
+
+        <!-- DAILY CHECK-IN -->
+        <section id="checkin" class="glass-card">
+            <h2>How are you today?</h2>
+            
+            <div class="mood-picker">
+                <div class="mood-option" data-mood="happy" onclick="selectMood('happy')">😄</div>
+                <div class="mood-option" data-mood="okay" onclick="selectMood('okay')">🙂</div>
+                <div class="mood-option" data-mood="neutral" onclick="selectMood('neutral')">😐</div>
+                <div class="mood-option" data-mood="low" onclick="selectMood('low')">😔</div>
+                <div class="mood-option" data-mood="verylow" onclick="selectMood('verylow')">😞</div>
+            </div>
+
+            <div class="slider-group">
+                <div class="slider-label">
+                    <span>Stress Level</span>
+                    <span id="stress-value">3/5</span>
+                </div>
+                <div class="slider-container">
+                    <div class="slider-fill" id="stress-fill"></div>
+                    <input type="range" min="1" max="5" value="3" class="slider" id="stress" oninput="updateSlider('stress')">
+                </div>
+            </div>
+
+            <div class="slider-group">
+                <div class="slider-label">
+                    <span>Sleep Quality</span>
+                    <span id="sleep-value">3/5</span>
+                </div>
+                <div class="slider-container">
+                    <div class="slider-fill" id="sleep-fill"></div>
+                    <input type="range" min="1" max="5" value="3" class="slider" id="sleep" oninput="updateSlider('sleep')">
+                </div>
+            </div>
+
+            <div class="slider-group">
+                <div class="slider-label">
+                    <span>Energy Level</span>
+                    <span id="energy-value">3/5</span>
+                </div>
+                <div class="slider-container">
+                    <div class="slider-fill" id="energy-fill"></div>
+                    <input type="range" min="1" max="5" value="3" class="slider" id="energy" oninput="updateSlider('energy')">
+                </div>
+            </div>
+
+            <div class="slider-group">
+                <div class="slider-label">
+                    <span>Focus Level</span>
+                    <span id="focus-value">3/5</span>
+                </div>
+                <div class="slider-container">
+                    <div class="slider-fill" id="focus-fill"></div>
+                    <input type="range" min="1" max="5" value="3" class="slider" id="focus" oninput="updateSlider('focus')">
+                </div>
+            </div>
+
+            <div class="toggle-container">
+                <label class="toggle-label">Did you feel overwhelmed today?</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="overwhelmed">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+
+            <div style="margin: 24px 0;">
+                <label class="toggle-label">One word for today</label>
+                <input type="text" class="input-field" id="oneword" placeholder="e.g., hopeful, tired, motivated...">
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%; margin-top: 16px;" onclick="saveCheckin()">Save Today's Check-in</button>
+        </section>
+
+        <!-- JOURNAL -->
+        <section id="journal" class="glass-card">
+            <h2>Quick Journal</h2>
+            
+            <div style="margin: 20px 0;">
+                <label class="toggle-label">What drained you today?</label>
+                <textarea class="input-field" id="drained" placeholder="Write freely..."></textarea>
+            </div>
+
+            <div style="margin: 20px 0;">
+                <label class="toggle-label">One thing you could do better tomorrow?</label>
+                <textarea class="input-field" id="better" placeholder="Be kind to yourself..."></textarea>
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%;" onclick="saveJournal()">Save Journal</button>
+        </section>
+
+        <!-- CALM ZONE -->
+        <section id="calm" class="glass-card">
+            <h2>Calm Your Mind</h2>
+            
+            <div class="breathing-container">
+                <div class="breathing-modes">
+                    <button class="mode-btn active" onclick="setBreathingMode('box')">Box Breathing</button>
+                    <button class="mode-btn" onclick="setBreathingMode('478')">4-7-8 Breathing</button>
+                    <button class="mode-btn" onclick="setBreathingMode('panic')">30s Panic Reset</button>
+                </div>
+
+                <div class="breathing-circle-container">
+                    <div class="breathing-circle" id="breathingCircle"></div>
+                    <div class="breathing-text" id="breathingText">Ready</div>
+                </div>
+
+                <div id="panicProgress" class="progress-bar" style="display: none;">
+                    <div class="progress-fill" id="panicProgressFill"></div>
+                </div>
+
+                <div class="breathing-controls">
+                    <button class="btn btn-primary" onclick="startBreathing()">Start</button>
+                    <button class="btn btn-secondary" onclick="pauseBreathing()">Pause</button>
+                    <button class="btn btn-secondary" onclick="resetBreathing()">Reset</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- INSIGHTS -->
+        <section id="insights" class="glass-card">
+            <h2>Weekly Insights</h2>
+            
+            <div class="chart-toggles">
+                <button class="chart-toggle active" onclick="toggleChart('stress')">Stress</button>
+                <button class="chart-toggle" onclick="toggleChart('sleep')">Sleep</button>
+                <button class="chart-toggle" onclick="toggleChart('energy')">Energy</button>
+            </div>
+
+            <div id="chartContainer">
+                <canvas id="insightsChart"></canvas>
+            </div>
+
+            <div id="emptyState" class="empty-state" style="display: none;">
+                Start your check-ins to see your weekly insights.
+            </div>
+        </section>
+
+        <!-- PRIVACY -->
+        <section class="glass-card">
+            <h2>Your Privacy Matters</h2>
+            <ul class="resource-list">
+                <li>✓ No login required</li>
+                <li>✓ No cloud storage</li>
+                <li>✓ All data stays on your device</li>
+                <li>✓ You can clear your data anytime</li>
+            </ul>
+            <button class="btn danger-btn" style="width: 100%; margin-top: 24px;" onclick="clearAllData()">Clear All My Data</button>
+        </section>
+
+        
+        <footer>
+            <p><strong>MindMate</strong> — Built by Synapse Squad</p>
+            <p>VIT Bhopal × Johns Hopkins Health Hackathon 2026</p>
+        </footer>
+    </div>
+    <script src="mindmate.js"></script>
+</body>
+</html>
+   
