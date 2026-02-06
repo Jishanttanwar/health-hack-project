@@ -241,7 +241,7 @@ h2 {
 
 .slider-container {
     position: relative;
-    height: 8px;
+    height: 14px;
     background: rgba(255, 255, 255, 0.5);
     border-radius: 8px;
     overflow: hidden;
@@ -249,7 +249,7 @@ h2 {
 
 .slider {
     width: 100%;
-    height: 8px;
+    height: 14px;
     background: transparent;
     outline: none;
     -webkit-appearance: none;
@@ -259,13 +259,14 @@ h2 {
 
 .slider::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
     background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%);
     border-radius: 50%;
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(139, 92, 246, 0.5);
     transition: transform 0.2s ease;
+    margin-top: -4px;
 }
 
 .slider::-webkit-slider-thumb:hover {
@@ -273,13 +274,14 @@ h2 {
 }
 
 .slider::-moz-range-thumb {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
     background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%);
     border-radius: 50%;
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(139, 92, 246, 0.5);
     border: none;
+    margin-top: -4px;
 }
 
 .slider-fill {
@@ -390,85 +392,321 @@ textarea.input-field {
     display: block;
 }
 
-/* ==================== BREATHING EXERCISES ==================== */
+/* ==================== ENHANCED BREATHING ANIMATIONS ==================== */
+
+.breathing-circle {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+    transform: scale(1);
+    transition: background 0.8s ease, box-shadow 0.8s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Breathing states with smooth color transitions */
+.breathing-circle.inhale {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 15px 60px rgba(102, 126, 234, 0.5),
+                0 0 30px rgba(102, 126, 234, 0.3),
+                inset 0 0 50px rgba(255, 255, 255, 0.1);
+}
+
+.breathing-circle.exhale {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    box-shadow: 0 10px 40px rgba(245, 87, 108, 0.4),
+                0 0 20px rgba(245, 87, 108, 0.2),
+                inset 0 0 30px rgba(255, 255, 255, 0.1);
+}
+
+.breathing-circle.hold-in {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    box-shadow: 0 15px 60px rgba(79, 172, 254, 0.5),
+                0 0 30px rgba(79, 172, 254, 0.3),
+                inset 0 0 50px rgba(255, 255, 255, 0.15);
+}
+
+.breathing-circle.hold-out {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    box-shadow: 0 10px 40px rgba(67, 233, 123, 0.4),
+                0 0 20px rgba(67, 233, 123, 0.2),
+                inset 0 0 30px rgba(255, 255, 255, 0.1);
+}
+
+.breathing-circle.complete {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    box-shadow: 0 20px 80px rgba(250, 112, 154, 0.6),
+                0 0 40px rgba(254, 225, 64, 0.4),
+                inset 0 0 60px rgba(255, 255, 255, 0.2);
+}
+
+/* Pulsating glow effect */
+.breathing-circle.inhale::before,
+.breathing-circle.hold-in::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border-radius: 50%;
+    background: inherit;
+    filter: blur(20px);
+    opacity: 0.6;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.4; transform: scale(0.95); }
+    50% { opacity: 0.7; transform: scale(1.05); }
+}
+
+/* Inner glow ring */
+.breathing-circle::after {
+    content: '';
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    right: 10%;
+    bottom: 10%;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.2);
+    animation: rotate 10s linear infinite;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Breathing text styling */
+#breathingText {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    margin-top: 2rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.2s ease-out;
+    text-align: center;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Cycle counter text under breathing */
+.cycle-text {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #555;
+    text-align: center;
+}
+
+/* Mode buttons */
+.mode-btn {
+    padding: 0.75rem 1.5rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 25px;
+    background: white;
+    color: #666;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.mode-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(102, 126, 234, 0.1);
+    transform: translate(-50%, -50%);
+    transition: width 0.4s ease, height 0.4s ease;
+}
+
+.mode-btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.mode-btn:hover {
+    border-color: #667eea;
+    color: #667eea;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+}
+
+.mode-btn.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* Progress bar for panic mode */
+#panicProgress {
+    width: 100%;
+    max-width: 400px;
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 10px;
+    margin-top: 2rem;
+    overflow: hidden;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#panicProgressFill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background-size: 200% 100%;
+    border-radius: 10px;
+    transition: width 0.5s ease-out;
+    animation: shimmer 2s ease-in-out infinite;
+    box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Control buttons */
+.control-btn {
+    padding: 0.875rem 2rem;
+    border: none;
+    border-radius: 30px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.control-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+}
+
+.control-btn:active::after {
+    width: 300px;
+    height: 300px;
+}
+
+.start-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.start-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(102, 126, 234, 0.4);
+}
+
+.pause-btn {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+}
+
+.pause-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(245, 87, 108, 0.4);
+}
+
+.reset-btn {
+    background: white;
+    color: #666;
+    border: 2px solid #e0e0e0;
+}
+
+.reset-btn:hover {
+    border-color: #667eea;
+    color: #667eea;
+    transform: translateY(-2px);
+}
+
+/* Optional particle effects */
+.breath-particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 70%);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    pointer-events: none;
+    animation: particle-float 1s ease-out forwards;
+}
+
+@keyframes particle-float {
+    0% {
+        transform: translate(-50%, -50%) rotate(var(--angle)) translateX(0) scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(var(--angle)) translateX(100px) scale(1.5);
+        opacity: 0;
+    }
+}
+
+/* Container styling */
 .breathing-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 24px;
-    padding: 40px 20px;
+    gap: 2rem;
+    padding: 3rem;
+    background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
 }
 
-.breathing-modes {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    justify-content: center;
+/* Responsive design */
+@media (max-width: 768px) {
+    .breathing-circle {
+        width: 150px;
+        height: 150px;
+    }
+    
+    #breathingText {
+        font-size: 1.25rem;
+    }
+    
+    .control-btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.9rem;
+    }
 }
 
-.mode-btn {
-    padding: 12px 24px;
-    border-radius: 12px;
-    border: 2px solid rgba(139, 92, 246, 0.3);
-    background: rgba(255, 255, 255, 0.3);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: 500;
-    color: #374151;
-}
-
-.mode-btn.active {
-    background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%);
-    color: white;
-    border-color: transparent;
-}
-
-.breathing-circle-container {
-    position: relative;
-    width: 280px;
-    height: 280px;
-    margin: 40px auto;
-}
-
-.breathing-circle {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 50%, #3B82F6 100%);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 0 40px rgba(139, 92, 246, 0.6);
-    transition: all 0.5s ease;
-}
-
-.breathing-circle.inhale {
-    width: 280px;
-    height: 280px;
-}
-
-.breathing-circle.exhale {
-    width: 120px;
-    height: 120px;
-}
-
-.breathing-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: white;
-    z-index: 10;
-}
-
-.breathing-controls {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    justify-content: center;
+/* Accessibility - reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .breathing-circle,
+    .breathing-circle::before,
+    .breathing-circle::after,
+    .mode-btn,
+    .control-btn,
+    #breathingText {
+        animation: none !important;
+        transition: none !important;
+    }
 }
 
 /* ==================== PROGRESS BAR ==================== */
@@ -571,12 +809,13 @@ footer {
     }
 
     .breathing-circle.inhale {
-        width: 220px;
-        height: 220px;
+        width: 170px;
+        height: 170px;
     }
 
     .breathing-circle.exhale {
-        width: 100px;
-        height: 100px;
+        width: 120px;
+        height: 120px;
     }
 }
+

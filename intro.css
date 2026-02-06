@@ -1,0 +1,419 @@
+/* ==================== MINDMATE INTRO STYLES ==================== */
+/* Premium mental wellness onboarding experience */
+
+:root {
+  /* Calm color palette */
+  --intro-lavender: #E8D5F2;
+  --intro-pastel-blue: #C9E4F5;
+  --intro-mint: #D4F1E8;
+  --intro-text-primary: #2C3E50;
+  --intro-text-secondary: #5A6C7D;
+  --intro-accent: #9B7EBD;
+  
+  /* Premium spacing */
+  --intro-spacing-xs: 0.5rem;
+  --intro-spacing-sm: 1rem;
+  --intro-spacing-md: 1.5rem;
+  --intro-spacing-lg: 2.5rem;
+  --intro-spacing-xl: 4rem;
+  
+  /* Smooth easing */
+  --intro-ease: cubic-bezier(0.4, 0.0, 0.2, 1);
+  --intro-ease-in: cubic-bezier(0.4, 0.0, 1, 1);
+  --intro-ease-out: cubic-bezier(0.0, 0.0, 0.2, 1);
+  
+  /* Timing */
+  --intro-duration-fast: 400ms;
+  --intro-duration-medium: 600ms;
+  --intro-duration-slow: 800ms;
+}
+
+/* ==================== CONTAINER ==================== */
+
+#mindmate-intro {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  height: 100vh;
+  height: 100dvh; /* Dynamic viewport height for mobile */
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--intro-lavender) 0%, var(--intro-pastel-blue) 100%);
+  animation: gradientFlow 12s ease-in-out infinite;
+  background-size: 200% 200%;
+}
+
+@keyframes gradientFlow {
+  0% {
+    background: linear-gradient(135deg, var(--intro-lavender) 0%, var(--intro-pastel-blue) 50%, var(--intro-mint) 100%);
+    background-position: 0% 50%;
+  }
+  33% {
+    background: linear-gradient(135deg, var(--intro-pastel-blue) 0%, var(--intro-mint) 50%, var(--intro-lavender) 100%);
+    background-position: 100% 50%;
+  }
+  66% {
+    background: linear-gradient(135deg, var(--intro-mint) 0%, var(--intro-lavender) 50%, var(--intro-pastel-blue) 100%);
+    background-position: 50% 100%;
+  }
+  100% {
+    background: linear-gradient(135deg, var(--intro-lavender) 0%, var(--intro-pastel-blue) 50%, var(--intro-mint) 100%);
+    background-position: 0% 50%;
+  }
+}
+
+/* Subtle noise texture overlay */
+#mindmate-intro::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+/* ==================== CONTENT CONTAINER ==================== */
+
+.intro-content {
+  position: relative;
+  z-index: 1;
+  width: 90%;
+  max-width: 480px;
+  padding: var(--intro-spacing-lg);
+  text-align: center;
+}
+
+/* ==================== LOGO PHASE ==================== */
+
+.intro-logo {
+  opacity: 0;
+  transform: scale(0.92);
+}
+
+.intro-logo h1 {
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: clamp(2.5rem, 8vw, 4rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--intro-text-primary);
+  margin: 0;
+  background: linear-gradient(135deg, #2C3E50 0%, #5A6C7D 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 12px rgba(155, 126, 189, 0.12));
+}
+
+.intro-logo.active {
+  animation: logoAppear var(--intro-duration-slow) var(--intro-ease) forwards;
+}
+
+@keyframes logoAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ==================== FEATURE SLIDES ==================== */
+
+.intro-slides {
+  position: relative;
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--intro-spacing-xl);
+}
+
+.intro-slide {
+  position: absolute;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: none;
+}
+
+.intro-slide-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--intro-spacing-md);
+}
+
+.intro-slide-icon {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 20px;
+  box-shadow: 
+    0 8px 32px rgba(155, 126, 189, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  font-size: 32px;
+  transition: transform var(--intro-duration-medium) var(--intro-ease);
+}
+
+.intro-slide.active .intro-slide-icon {
+  transform: scale(1.05);
+}
+
+.intro-slide h2 {
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--intro-text-primary);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.intro-slide p {
+  font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: clamp(1rem, 3vw, 1.125rem);
+  font-weight: 400;
+  color: var(--intro-text-secondary);
+  margin: 0;
+  line-height: 1.6;
+  max-width: 320px;
+}
+
+/* Slide animation states */
+.intro-slide.active {
+  animation: slideIn var(--intro-duration-medium) var(--intro-ease) forwards;
+}
+
+.intro-slide.exit {
+  animation: slideOut var(--intro-duration-medium) var(--intro-ease) forwards;
+}
+
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+/* ==================== FINAL SCREEN ==================== */
+
+.intro-final {
+  opacity: 0;
+  transform: scale(0.96);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--intro-spacing-lg);
+  margin-top: var(--intro-spacing-xl);
+}
+
+.intro-final.active {
+  animation: finalAppear var(--intro-duration-slow) var(--intro-ease) forwards;
+}
+
+@keyframes finalAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.intro-final-text {
+  font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: clamp(1.125rem, 4vw, 1.375rem);
+  font-weight: 500;
+  color: var(--intro-text-primary);
+  margin: 0;
+  line-height: 1.5;
+  max-width: 360px;
+  text-align: center;
+}
+
+.intro-cta-button {
+  font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  background: linear-gradient(135deg, #9B7EBD 0%, #B8A4D0 100%);
+  border: none;
+  border-radius: 16px;
+  padding: 1rem 3rem;
+  min-width: 200px;
+  cursor: pointer;
+  box-shadow: 
+    0 8px 24px rgba(155, 126, 189, 0.25),
+    0 2px 8px rgba(155, 126, 189, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all var(--intro-duration-fast) var(--intro-ease);
+  position: relative;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.intro-cta-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+  opacity: 0;
+  transition: opacity var(--intro-duration-fast) var(--intro-ease);
+}
+
+.intro-cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 12px 32px rgba(155, 126, 189, 0.3),
+    0 4px 12px rgba(155, 126, 189, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.intro-cta-button:hover::before {
+  opacity: 1;
+}
+
+.intro-cta-button:active {
+  transform: translateY(0);
+  box-shadow: 
+    0 6px 20px rgba(155, 126, 189, 0.25),
+    0 2px 8px rgba(155, 126, 189, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* ==================== UTILITY CLASSES ==================== */
+
+.intro-hidden {
+  display: none !important;
+}
+
+.intro-fade-out {
+  animation: introFadeOut var(--intro-duration-medium) var(--intro-ease) forwards;
+}
+
+@keyframes introFadeOut {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+@media (max-width: 480px) {
+  .intro-content {
+    padding: var(--intro-spacing-md);
+  }
+  
+  .intro-slides {
+    min-height: 200px;
+  }
+  
+  .intro-slide-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 28px;
+  }
+  
+  .intro-cta-button {
+    padding: 0.875rem 2.5rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-height: 600px) {
+  .intro-slides {
+    min-height: 140px;
+    margin-top: var(--intro-spacing-lg);
+  }
+  
+  .intro-final {
+    margin-top: var(--intro-spacing-lg);
+    gap: var(--intro-spacing-md);
+  }
+  
+  .intro-slide-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 24px;
+  }
+}
+
+/* ==================== ACCESSIBILITY ==================== */
+
+@media (prefers-reduced-motion: reduce) {
+  #mindmate-intro {
+    animation: none;
+  }
+  
+  .intro-logo.active,
+  .intro-slide.active,
+  .intro-slide.exit,
+  .intro-final.active,
+  .intro-fade-out {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  
+  .intro-cta-button {
+    transition: none;
+  }
+}
+
+/* ==================== FOCUS STATES ==================== */
+
+.intro-cta-button:focus {
+  outline: none;
+  box-shadow: 
+    0 0 0 4px rgba(155, 126, 189, 0.3),
+    0 12px 32px rgba(155, 126, 189, 0.3),
+    0 4px 12px rgba(155, 126, 189, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.intro-cta-button:focus:not(:focus-visible) {
+  box-shadow: 
+    0 8px 24px rgba(155, 126, 189, 0.25),
+    0 2px 8px rgba(155, 126, 189, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}

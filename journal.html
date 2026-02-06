@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MindMate - Journal History</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="mindmate.css">
+</head>
+<body>
+
+<div class="container">
+    <section class="hero">
+        <h1>📔 Journal History</h1>
+        <p>Your past reflections, stored only on this device</p>
+        <button class="btn btn-secondary" onclick="window.location.href='index.html'">
+            ← Back to MindMate
+        </button>
+    </section>
+
+    <section class="glass-card" id="journalList">
+        <!-- Journal entries will appear here -->
+    </section>
+</div>
+
+<script>
+function loadJournals() {
+    const container = document.getElementById("journalList");
+    const journals = JSON.parse(localStorage.getItem("mindmate_journals") || "[]");
+
+    if (journals.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                No journal entries yet.<br>
+                Start writing in the main app.
+            </div>
+        `;
+        return;
+    }
+
+    // Latest first
+    journals.reverse();
+
+    container.innerHTML = journals.map(j => `
+        <div class="glass-card" style="margin-bottom:20px;">
+            <h3>${new Date(j.timestamp).toLocaleString()}</h3>
+            <p><strong>What drained you:</strong><br>${j.drained || "—"}</p>
+            <p style="margin-top:10px;"><strong>Better tomorrow:</strong><br>${j.better || "—"}</p>
+        </div>
+    `).join("");
+}
+
+loadJournals();
+</script>
+
+</body>
+</html>
