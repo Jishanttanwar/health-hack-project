@@ -189,8 +189,11 @@ A `"true"` / `null` flag to skip the intro on return visits.
 
 | Name | Role |
 |------|------|
-| Jishant Tanwar | Lead Developer |
-| *(add teammates)* | *(add roles)* |
+| Jishant Tanwar | Lead Developer | Team leader
+| Riddhima Saluja | UI/UX Designer | Team member
+| Sneha Singh | Developer & Animator | Team member
+| Maitri Srivastava | Content Writer & Lead UX | Team member
+| Kavya | Research and content | Team member
 
 ---
 
@@ -201,13 +204,4 @@ Theme: *Mental Wellness & Accessible Health Tech*
 
 ---
 
-## 📄 License
 
-MIT License — free to use, modify, and distribute.
-
----
-
-*If you're struggling, please reach out to a mental health professional. MindMate is a supplementary tool, not a replacement for professional care.*
-
-**National Crisis Helpline (India):** iCall — 9152987821  
-**Crisis Text Line (US):** Text HOME to 741741
