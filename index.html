@@ -3,87 +3,217 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MindMate - Your Mental Wellness Companion</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="description" content="MindMate — Your private daily mental wellness companion. Track mood, journal your thoughts, practice breathing, and view weekly insights. No login, no cloud, 100% private.">
+    <meta name="theme-color" content="#8B5CF6">
+    <meta property="og:title" content="MindMate — Mental Wellness Companion">
+    <meta property="og:description" content="Private mental wellness tracking. Mood check-ins, journaling, breathing exercises, and insights — all stored locally on your device.">
+    <meta property="og:type" content="website">
+    <title>MindMate — Your Mental Wellness Companion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <link rel="stylesheet" href="mindmate.css">
-
-    
 </head>
 <body>
+    <!-- ANIMATED BACKGROUND -->
     <div class="animated-bg">
         <div class="blob blob1"></div>
         <div class="blob blob2"></div>
         <div class="blob blob3"></div>
+        <div class="blob blob4"></div>
     </div>
 
+    <!-- FLOATING PARTICLES -->
+    <div class="particles" id="particles"></div>
+
+    <!-- TOAST -->
     <div class="toast" id="toast">Saved locally ✔️</div>
 
+    <!-- STICKY NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-inner">
+            <a href="#" class="navbar-brand" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
+                <div class="navbar-logo-ring">
+                    <span class="navbar-logo">🧠</span>
+                </div>
+                <span class="navbar-title">MindMate</span>
+            </a>
+            <div class="navbar-links">
+                <a href="#checkin" class="nav-link" onclick="smoothNav(event,'checkin')">
+                    <span class="nav-icon">📋</span> Check-in
+                </a>
+                <a href="#journal" class="nav-link" onclick="smoothNav(event,'journal')">
+                    <span class="nav-icon">✍️</span> Journal
+                </a>
+                <a href="#calm" class="nav-link" onclick="smoothNav(event,'calm')">
+                    <span class="nav-icon">🧘</span> Breathe
+                </a>
+                <a href="#insights" class="nav-link" onclick="smoothNav(event,'insights')">
+                    <span class="nav-icon">📊</span> Insights
+                </a>
+            </div>
+            <button class="btn btn-primary navbar-cta" onclick="scrollToSection('checkin')">
+                <span>+</span> New Entry
+            </button>
+            <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="#checkin" class="mobile-link" onclick="smoothNav(event,'checkin')">📋 Daily Check-in</a>
+            <a href="#journal" class="mobile-link" onclick="smoothNav(event,'journal')">✍️ Quick Journal</a>
+            <a href="#calm" class="mobile-link" onclick="smoothNav(event,'calm')">🧘 Breathing Exercises</a>
+            <a href="#insights" class="mobile-link" onclick="smoothNav(event,'insights')">📊 Weekly Insights</a>
+        </div>
+    </nav>
+
     <div class="container">
-        <!-- HERO SECTION -->
-        <section class="hero">
-            <h1>MindMate</h1>
-            <p>Your private daily mental wellness companion</p>
+
+        <!-- ============ HERO SECTION ============ -->
+        <section class="hero" id="heroSection">
+            <div class="hero-glow"></div>
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                Your Daily Wellness Space
+            </div>
+            <h1>Mind<span class="hero-accent">Mate</span></h1>
+            <p class="hero-subtitle">Track your mental wellness, practice mindfulness,<br>and build healthier habits — all privately on your device.</p>
+
+            <!-- STREAK COUNTER -->
+            <div class="streak-card" id="streakCard">
+                <div class="streak-item">
+                    <div class="streak-icon-wrap fire">
+                        <span class="streak-icon">🔥</span>
+                    </div>
+                    <span class="streak-number" id="streakCount">0</span>
+                    <span class="streak-label">Day Streak</span>
+                </div>
+                <div class="streak-divider"></div>
+                <div class="streak-item">
+                    <div class="streak-icon-wrap blue">
+                        <span class="streak-icon">📅</span>
+                    </div>
+                    <span class="streak-number" id="totalCheckins">0</span>
+                    <span class="streak-label">Check-ins</span>
+                </div>
+                <div class="streak-divider"></div>
+                <div class="streak-item">
+                    <div class="streak-icon-wrap green">
+                        <span class="streak-icon">✍️</span>
+                    </div>
+                    <span class="streak-number" id="totalJournals">0</span>
+                    <span class="streak-label">Journals</span>
+                </div>
+            </div>
+
             <div class="hero-buttons">
-                <button class="btn btn-primary" onclick="scrollToSection('checkin')">Start Check-in</button>
-                <button class="btn btn-secondary" onclick="scrollToSection('calm')">Try Breathing</button>
-                <button class="btn btn-secondary" onclick="scrollToSection('insights')">View Insights</button>
+                <button class="btn btn-primary btn-glow" onclick="scrollToSection('checkin')">
+                    ✨ Start Check-in
+                </button>
+                <button class="btn btn-glass" onclick="scrollToSection('calm')">
+                    🧘 Try Breathing
+                </button>
+                <button class="btn btn-glass" onclick="scrollToSection('insights')">
+                    📈 View Insights
+                </button>
             </div>
         </section>
 
-        <!-- DAILY CHECK-IN -->
-        <section id="checkin" class="glass-card">
-            <h2>How are you today?</h2>
+        <!-- ============ MOTIVATIONAL QUOTE ============ -->
+        <section class="quote-card" id="quoteSection">
+            <div class="quote-decoration">
+                <svg width="42" height="32" viewBox="0 0 42 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 32V19.2C0 13.87 1.47 9.44 4.4 5.92C7.4 2.35 11.33 0.13 16.2 -0.27V6.93C13.47 7.6 11.33 9.04 9.8 11.25C8.27 13.39 7.47 15.87 7.4 18.67H16.2V32H0ZM25.8 32V19.2C25.8 13.87 27.27 9.44 30.2 5.92C33.2 2.35 37.13 0.13 42 -0.27V6.93C39.27 7.6 37.13 9.04 35.6 11.25C34.07 13.39 33.27 15.87 33.2 18.67H42V32H25.8Z" fill="url(#quoteGrad)"/>
+                    <defs>
+                        <linearGradient id="quoteGrad" x1="0" y1="0" x2="42" y2="32">
+                            <stop stop-color="#8B5CF6" stop-opacity="0.15"/>
+                            <stop offset="1" stop-color="#6366F1" stop-opacity="0.08"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <blockquote class="quote-text" id="quoteText"></blockquote>
+            <cite class="quote-author" id="quoteAuthor"></cite>
+            <button class="btn btn-ghost quote-refresh" onclick="refreshQuote()" id="quoteRefreshBtn">
+                ↻ New Quote
+            </button>
+        </section>
+
+        <!-- ============ DAILY CHECK-IN ============ -->
+        <section id="checkin" class="glass-card section-card">
+            <div class="section-header">
+                <div class="section-icon-badge checkin-badge">📋</div>
+                <div>
+                    <h2>Daily Check-in</h2>
+                    <p class="section-desc">How are you feeling today?</p>
+                </div>
+            </div>
             
             <div class="mood-picker">
-                <div class="mood-option" data-mood="happy" onclick="selectMood('happy')">😄</div>
-                <div class="mood-option" data-mood="okay" onclick="selectMood('okay')">🙂</div>
-                <div class="mood-option" data-mood="neutral" onclick="selectMood('neutral')">😐</div>
-                <div class="mood-option" data-mood="low" onclick="selectMood('low')">😔</div>
-                <div class="mood-option" data-mood="verylow" onclick="selectMood('verylow')">😞</div>
-            </div>
-
-            <div class="slider-group">
-                <div class="slider-label">
-                    <span>Stress Level</span>
-                    <span id="stress-value">3/5</span>
+                <div class="mood-option" data-mood="happy" onclick="selectMood('happy')" title="Happy">
+                    <span class="mood-emoji">😄</span>
+                    <span class="mood-label">Happy</span>
                 </div>
-                <div class="slider-container">
-                    <div class="slider-fill" id="stress-fill"></div>
-                    <input type="range" min="1" max="5" value="3" class="slider" id="stress" oninput="updateSlider('stress')">
+                <div class="mood-option" data-mood="okay" onclick="selectMood('okay')" title="Okay">
+                    <span class="mood-emoji">🙂</span>
+                    <span class="mood-label">Okay</span>
                 </div>
-            </div>
-
-            <div class="slider-group">
-                <div class="slider-label">
-                    <span>Sleep Quality</span>
-                    <span id="sleep-value">3/5</span>
+                <div class="mood-option" data-mood="neutral" onclick="selectMood('neutral')" title="Neutral">
+                    <span class="mood-emoji">😐</span>
+                    <span class="mood-label">Neutral</span>
                 </div>
-                <div class="slider-container">
-                    <div class="slider-fill" id="sleep-fill"></div>
-                    <input type="range" min="1" max="5" value="3" class="slider" id="sleep" oninput="updateSlider('sleep')">
+                <div class="mood-option" data-mood="low" onclick="selectMood('low')" title="Low">
+                    <span class="mood-emoji">😔</span>
+                    <span class="mood-label">Low</span>
+                </div>
+                <div class="mood-option" data-mood="verylow" onclick="selectMood('verylow')" title="Very Low">
+                    <span class="mood-emoji">😞</span>
+                    <span class="mood-label">V. Low</span>
                 </div>
             </div>
 
-            <div class="slider-group">
-                <div class="slider-label">
-                    <span>Energy Level</span>
-                    <span id="energy-value">3/5</span>
+            <div class="sliders-grid">
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>😰 Stress Level</span>
+                        <span class="slider-val" id="stress-value">3/5</span>
+                    </div>
+                    <div class="slider-container">
+                        <div class="slider-fill stress-color" id="stress-fill"></div>
+                        <input type="range" min="1" max="5" value="3" class="slider" id="stress" oninput="updateSlider('stress')">
+                    </div>
                 </div>
-                <div class="slider-container">
-                    <div class="slider-fill" id="energy-fill"></div>
-                    <input type="range" min="1" max="5" value="3" class="slider" id="energy" oninput="updateSlider('energy')">
-                </div>
-            </div>
 
-            <div class="slider-group">
-                <div class="slider-label">
-                    <span>Focus Level</span>
-                    <span id="focus-value">3/5</span>
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>😴 Sleep Quality</span>
+                        <span class="slider-val" id="sleep-value">3/5</span>
+                    </div>
+                    <div class="slider-container">
+                        <div class="slider-fill sleep-color" id="sleep-fill"></div>
+                        <input type="range" min="1" max="5" value="3" class="slider" id="sleep" oninput="updateSlider('sleep')">
+                    </div>
                 </div>
-                <div class="slider-container">
-                    <div class="slider-fill" id="focus-fill"></div>
-                    <input type="range" min="1" max="5" value="3" class="slider" id="focus" oninput="updateSlider('focus')">
+
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>⚡ Energy Level</span>
+                        <span class="slider-val" id="energy-value">3/5</span>
+                    </div>
+                    <div class="slider-container">
+                        <div class="slider-fill energy-color" id="energy-fill"></div>
+                        <input type="range" min="1" max="5" value="3" class="slider" id="energy" oninput="updateSlider('energy')">
+                    </div>
+                </div>
+
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>🎯 Focus Level</span>
+                        <span class="slider-val" id="focus-value">3/5</span>
+                    </div>
+                    <div class="slider-container">
+                        <div class="slider-fill focus-color" id="focus-fill"></div>
+                        <input type="range" min="1" max="5" value="3" class="slider" id="focus" oninput="updateSlider('focus')">
+                    </div>
                 </div>
             </div>
 
@@ -95,49 +225,95 @@
                 </label>
             </div>
 
-            <div style="margin: 24px 0;">
-                <label class="toggle-label">One word for today</label>
-                <input type="text" class="input-field" id="oneword" placeholder="e.g., hopeful, tired, motivated...">
+            <!-- OVERWHELM SUGGESTION -->
+            <div class="overwhelm-card" id="overwhelmSuggestion" style="display:none;">
+                <div class="overwhelm-inner">
+                    <span class="overwhelm-icon">💙</span>
+                    <div>
+                        <p class="overwhelm-title">That's okay — you're not alone.</p>
+                        <p class="overwhelm-desc">Try a short breathing session to calm your nervous system. Even 2 minutes makes a difference.</p>
+                    </div>
+                </div>
+                <button class="btn btn-primary overwhelm-btn" onclick="scrollToSection('calm')">🧘 Go to Breathing →</button>
             </div>
 
-            <button class="btn btn-primary" style="width: 100%; margin-top: 16px;" onclick="saveCheckin()">Save Today's Check-in</button>
-        </section>
-
-        <!-- JOURNAL -->
-        <section id="journal" class="glass-card">
-            <h2>Quick Journal</h2>
-            
-            <div style="margin: 20px 0;">
-                <label class="toggle-label">What drained you today?</label>
-                <textarea class="input-field" id="drained" placeholder="Write freely..."></textarea>
+            <div class="field-group">
+                <label class="toggle-label">💭 One word for today</label>
+                <input type="text" class="input-field" id="oneword" placeholder="e.g., hopeful, tired, motivated..." maxlength="30">
             </div>
 
-            <div style="margin: 20px 0;">
-                <label class="toggle-label">One thing you could do better tomorrow?</label>
-                <textarea class="input-field" id="better" placeholder="Be kind to yourself..."></textarea>
-            </div>
-
-            <button class="btn btn-primary" style="width: 100%;" onclick="saveJournal()">Save Journal</button>
-            <button class="btn btn-secondary" style="width: 100%; margin-top: 12px;" onclick="window.location.href='journal.html'">
-                View Journal History
+            <button class="btn btn-primary btn-full btn-glow" id="saveCheckinBtn" onclick="saveCheckin()">
+                ✅ Save Today's Check-in
             </button>
         </section>
 
-        <!-- CALM ZONE -->
-        <section id="calm" class="glass-card">
-            <h2>Calm Your Mind</h2>
+        <!-- ============ JOURNAL ============ -->
+        <section id="journal" class="glass-card section-card">
+            <div class="section-header">
+                <div class="section-icon-badge journal-badge">✍️</div>
+                <div>
+                    <h2>Quick Journal</h2>
+                    <p class="section-desc">A moment to reflect on your day</p>
+                </div>
+            </div>
+            
+            <div class="field-group">
+                <label class="toggle-label">💧 What drained you today?</label>
+                <textarea class="input-field" id="drained" placeholder="Write freely — this stays on your device..."></textarea>
+            </div>
+
+            <div class="field-group">
+                <label class="toggle-label">🌱 One thing you could do better tomorrow?</label>
+                <textarea class="input-field" id="better" placeholder="Be kind to yourself..."></textarea>
+            </div>
+
+            <!-- GRATITUDE -->
+            <div class="gratitude-section">
+                <label class="toggle-label">🌻 Three things you're grateful for</label>
+                <div class="gratitude-grid">
+                    <input type="text" class="input-field gratitude-input" id="gratitude1" placeholder="1. I'm grateful for...">
+                    <input type="text" class="input-field gratitude-input" id="gratitude2" placeholder="2. I'm grateful for...">
+                    <input type="text" class="input-field gratitude-input" id="gratitude3" placeholder="3. I'm grateful for...">
+                </div>
+            </div>
+
+            <div class="btn-group-vertical">
+                <button class="btn btn-primary btn-full btn-glow" id="saveJournalBtn" onclick="saveJournal()">
+                    💾 Save Journal Entry
+                </button>
+                <button class="btn btn-glass btn-full" onclick="window.location.href='journal.html'">
+                    📔 View Journal History →
+                </button>
+            </div>
+        </section>
+
+        <!-- ============ CALM ZONE ============ -->
+        <section id="calm" class="glass-card section-card">
+            <div class="section-header">
+                <div class="section-icon-badge calm-badge">🧘</div>
+                <div>
+                    <h2>Calm Your Mind</h2>
+                    <p class="section-desc">Guided breathing exercises for inner peace</p>
+                </div>
+            </div>
             
             <div class="breathing-container">
                 <div class="breathing-modes">
-                    <button class="mode-btn active" onclick="setBreathingMode('box')">Box Breathing</button>
-                    <button class="mode-btn" onclick="setBreathingMode('478')">4-7-8 Breathing</button>
-                    <button class="mode-btn" onclick="setBreathingMode('panic')">30s Panic Reset</button>
+                    <button class="mode-btn active" id="modeBox" onclick="setBreathingMode('box', event)">
+                        <span class="mode-icon">⬜</span> Box Breathing
+                    </button>
+                    <button class="mode-btn" id="mode478" onclick="setBreathingMode('478', event)">
+                        <span class="mode-icon">🌊</span> 4-7-8 Breathing
+                    </button>
+                    <button class="mode-btn" id="modePanic" onclick="setBreathingMode('panic', event)">
+                        <span class="mode-icon">⚡</span> Panic Reset
+                    </button>
                 </div>
 
                 <div class="breathing-circle-container">
                     <div class="breathing-circle" id="breathingCircle"></div>
                     <div class="breathing-text" id="breathingText">Ready</div>
-                    <div class="cycle-text" id="cycleText">Cycle 0</div>
+                    <div class="cycle-text" id="cycleText"></div>
                 </div>
 
                 <div id="panicProgress" class="progress-bar" style="display: none;">
@@ -145,51 +321,73 @@
                 </div>
 
                 <div class="breathing-controls">
-                    <button class="btn btn-primary" onclick="startBreathing()">Start</button>
-                    <button class="btn btn-secondary" onclick="pauseBreathing()">Pause</button>
-                    <button class="btn btn-secondary" onclick="resetBreathing()">Reset</button>
+                    <button class="btn btn-primary btn-glow" id="startBreathBtn" onclick="startBreathing()">▶ Start</button>
+                    <button class="btn btn-glass" id="pauseBreathBtn" onclick="pauseBreathing()">⏸ Pause</button>
+                    <button class="btn btn-glass" id="resetBreathBtn" onclick="resetBreathing()">↺ Reset</button>
                 </div>
             </div>
         </section>
 
-        <!-- INSIGHTS -->
-        <section id="insights" class="glass-card">
-            <h2>Weekly Insights</h2>
+        <!-- ============ INSIGHTS ============ -->
+        <section id="insights" class="glass-card section-card">
+            <div class="section-header">
+                <div class="section-icon-badge insights-badge">📊</div>
+                <div>
+                    <h2>Weekly Insights</h2>
+                    <p class="section-desc">Visualize your wellness trends</p>
+                </div>
+            </div>
             
             <div class="chart-toggles">
-                <button class="chart-toggle active" onclick="toggleChart('stress')">Stress</button>
-                <button class="chart-toggle" onclick="toggleChart('sleep')">Sleep</button>
-                <button class="chart-toggle" onclick="toggleChart('energy')">Energy</button>
+                <button class="chart-toggle active" id="chartStress" onclick="toggleChart('stress', event)">😰 Stress</button>
+                <button class="chart-toggle" id="chartSleep" onclick="toggleChart('sleep', event)">😴 Sleep</button>
+                <button class="chart-toggle" id="chartEnergy" onclick="toggleChart('energy', event)">⚡ Energy</button>
+                <button class="chart-toggle" id="chartFocus" onclick="toggleChart('focus', event)">🎯 Focus</button>
             </div>
 
-            <div id="chartContainer">
+            <div id="chartContainer" class="chart-wrapper">
                 <canvas id="insightsChart"></canvas>
             </div>
 
             <div id="emptyState" class="empty-state" style="display: none;">
-                Start your check-ins to see your weekly insights.
+                <div class="empty-icon">🌱</div>
+                <p>Start your daily check-ins to unlock weekly insights.</p>
+                <button class="btn btn-primary" onclick="scrollToSection('checkin')" style="margin-top:16px;">Start First Check-in →</button>
             </div>
         </section>
 
-        <!-- PRIVACY -->
-        <section class="glass-card">
-            <h2>Your Privacy Matters</h2>
-            <ul class="resource-list">
-                <li>✓ No login required</li>
-                <li>✓ No cloud storage</li>
-                <li>✓ All data stays on your device</li>
-                <li>✓ You can clear your data anytime</li>
+        <!-- ============ PRIVACY ============ -->
+        <section class="glass-card section-card" id="privacy">
+            <div class="section-header">
+                <div class="section-icon-badge privacy-badge">🔒</div>
+                <div>
+                    <h2>Your Privacy Matters</h2>
+                    <p class="section-desc">100% private — everything stays on your device</p>
+                </div>
+            </div>
+            <ul class="privacy-list">
+                <li><span class="privacy-check">✓</span> No login or account required</li>
+                <li><span class="privacy-check">✓</span> No cloud storage — fully offline</li>
+                <li><span class="privacy-check">✓</span> All data stored in your browser only</li>
+                <li><span class="privacy-check">✓</span> No trackers, analytics, or cookies</li>
+                <li><span class="privacy-check">✓</span> Clear all data anytime with one tap</li>
             </ul>
-            <button class="btn danger-btn" style="width: 100%; margin-top: 24px;" onclick="clearAllData()">Clear All My Data</button>
+            <button class="btn btn-danger btn-full" id="clearDataBtn" onclick="clearAllData()">🗑️ Clear All My Data</button>
         </section>
 
-        
-        <footer>
-            <p><strong>MindMate</strong> — Built by Synapse Squad</p>
-            <p>VIT Bhopal × Johns Hopkins Health Hackathon 2026</p>
+        <!-- ============ FOOTER ============ -->
+        <footer class="site-footer">
+            <div class="footer-brand">
+                <span class="footer-logo">🧠</span>
+                <span class="footer-title">MindMate</span>
+            </div>
+            <p class="footer-tagline">Built with 💜 by <strong>Synapse Squad</strong></p>
+            <p class="footer-event">VIT Bhopal × Johns Hopkins Health Hackathon 2026</p>
+            <div class="footer-divider"></div>
+            <p class="footer-disclaimer">Your mental health matters. If you're in crisis, please reach out to a professional.</p>
         </footer>
     </div>
+
     <script src="mindmate.js"></script>
 </body>
 </html>
-   

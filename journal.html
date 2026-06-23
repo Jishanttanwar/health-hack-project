@@ -2,54 +2,493 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>MindMate - Journal History</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MindMate Journal History — Review your past reflections and gratitude entries, stored privately on your device.">
+    <title>MindMate — Journal History</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="mindmate.css">
+    <style>
+        /* Journal-specific styles */
+        .journal-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.15);
+            padding: 14px 20px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .journal-header {
+                background: rgba(10, 5, 25, 0.85);
+                border-color: rgba(255,255,255,0.08);
+            }
+            .journal-entry { color: var(--text-primary); }
+            .entry-date { color: var(--text-muted) !important; }
+            .entry-section-label { color: var(--primary-light) !important; }
+            .entry-section-text { color: var(--text-secondary) !important; }
+            .gratitude-tag {
+                background: rgba(139, 92, 246, 0.2) !important;
+                color: var(--primary-light) !important;
+            }
+            .search-input {
+                background: rgba(255,255,255,0.08) !important;
+                color: var(--text-primary) !important;
+                border-color: rgba(139,92,246,0.3) !important;
+            }
+            .search-input::placeholder { color: var(--text-muted) !important; }
+            .delete-btn { color: rgba(239,68,68,0.7) !important; }
+            .delete-btn:hover { color: #EF4444 !important; background: rgba(239,68,68,0.1) !important; }
+            .stats-bar { background: rgba(30, 20, 50, 0.6) !important; border-color: rgba(139,92,246,0.2) !important; }
+            .stat-value { color: var(--primary-light) !important; }
+            .stat-label { color: var(--text-muted) !important; }
+            .empty-journal { color: var(--text-muted) !important; }
+        }
+
+        .journal-header-inner {
+            max-width: 860px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            border-radius: 12px;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1.5px solid rgba(139, 92, 246, 0.25);
+            color: #8B5CF6;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: rgba(139, 92, 246, 0.18);
+            transform: translateX(-2px);
+        }
+
+        .header-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #8B5CF6, #6366F1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .search-wrap {
+            margin-left: auto;
+            position: relative;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.9rem;
+            pointer-events: none;
+        }
+
+        .search-input {
+            padding: 8px 14px 8px 34px;
+            border-radius: 12px;
+            border: 1.5px solid rgba(139, 92, 246, 0.2);
+            background: rgba(255,255,255,0.7);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.875rem;
+            color: #374151;
+            outline: none;
+            width: 220px;
+            transition: all 0.25s ease;
+        }
+
+        .search-input:focus {
+            border-color: #8B5CF6;
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+            width: 260px;
+        }
+
+        .journal-container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 24px 20px 48px;
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 0;
+            background: rgba(255,255,255,0.45);
+            border: 1px solid rgba(139,92,246,0.18);
+            border-radius: 18px;
+            padding: 14px 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 16px rgba(139,92,246,0.06);
+        }
+
+        .stat-item {
+            flex: 1;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #8B5CF6, #6366F1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #6B7280;
+            font-weight: 500;
+        }
+
+        .stat-divider {
+            width: 1px;
+            background: rgba(139, 92, 246, 0.15);
+            margin: 4px 0;
+        }
+
+        .journal-entry {
+            background: rgba(255, 255, 255, 0.28);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            box-shadow: 0 6px 28px rgba(0, 0, 0, 0.07);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            animation: fadeInUp 0.4s ease both;
+        }
+
+        .journal-entry:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 36px rgba(0, 0, 0, 0.1);
+        }
+
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 18px;
+        }
+
+        .entry-date {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #6B7280;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .entry-time {
+            font-size: 0.78rem;
+            color: #9CA3AF;
+            font-weight: 400;
+            margin-top: 2px;
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #D1D5DB;
+            font-size: 1rem;
+            padding: 6px 8px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            line-height: 1;
+        }
+
+        .delete-btn:hover {
+            color: #EF4444;
+            background: rgba(239, 68, 68, 0.08);
+        }
+
+        .entry-section {
+            margin-bottom: 14px;
+        }
+
+        .entry-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .entry-section-label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #8B5CF6;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .entry-section-text {
+            font-size: 0.95rem;
+            color: #374151;
+            line-height: 1.65;
+        }
+
+        .gratitude-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .gratitude-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: #6D28D9;
+            font-weight: 500;
+        }
+
+        .empty-journal {
+            text-align: center;
+            padding: 80px 20px;
+            color: #9CA3AF;
+        }
+
+        .empty-journal-icon {
+            font-size: 4rem;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .empty-journal p {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .empty-journal small {
+            font-size: 0.875rem;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px 20px;
+            color: #9CA3AF;
+            font-size: 0.95rem;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .search-input { width: 160px; }
+            .search-input:focus { width: 190px; }
+            .header-title { display: none; }
+            .journal-entry { padding: 20px 16px; }
+            .stats-bar { padding: 12px 16px; }
+        }
+    </style>
 </head>
 <body>
 
-<div class="container">
-    <section class="hero">
-        <h1>📔 Journal History</h1>
-        <p>Your past reflections, stored only on this device</p>
-        <button class="btn btn-secondary" onclick="window.location.href='index.html'">
-            ← Back to MindMate
-        </button>
-    </section>
+    <!-- ANIMATED BACKGROUND -->
+    <div class="animated-bg">
+        <div class="blob blob1"></div>
+        <div class="blob blob2"></div>
+        <div class="blob blob3"></div>
+    </div>
 
-    <section class="glass-card" id="journalList">
-        <!-- Journal entries will appear here -->
-    </section>
-</div>
+    <!-- STICKY HEADER -->
+    <header class="journal-header">
+        <div class="journal-header-inner">
+            <a href="index.html" class="back-btn">← Back</a>
+            <span class="header-title">📔 Journal History</span>
+            <div class="search-wrap">
+                <span class="search-icon">🔍</span>
+                <input 
+                    type="text" 
+                    class="search-input" 
+                    id="searchInput"
+                    placeholder="Search entries..."
+                    oninput="filterEntries()"
+                    aria-label="Search journal entries"
+                >
+            </div>
+        </div>
+    </header>
+
+    <div class="journal-container">
+
+        <!-- STATS BAR -->
+        <div class="stats-bar" id="statsBar" style="display:none;">
+            <div class="stat-item">
+                <span class="stat-value" id="statTotal">0</span>
+                <span class="stat-label">Total Entries</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <span class="stat-value" id="statGratitude">0</span>
+                <span class="stat-label">Gratitude Items</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <span class="stat-value" id="statDays">0</span>
+                <span class="stat-label">Days Journaled</span>
+            </div>
+        </div>
+
+        <!-- JOURNAL LIST -->
+        <div id="journalList"></div>
+
+    </div>
 
 <script>
-function loadJournals() {
-    const container = document.getElementById("journalList");
-    const journals = JSON.parse(localStorage.getItem("mindmate_journals") || "[]");
+    let allJournals = [];
 
-    if (journals.length === 0) {
-        container.innerHTML = `
-            <div class="empty-state">
-                No journal entries yet.<br>
-                Start writing in the main app.
-            </div>
-        `;
-        return;
+    function loadJournals() {
+        allJournals = JSON.parse(localStorage.getItem('mindmate_journals') || '[]');
+        renderStats(allJournals);
+        renderEntries(allJournals);
     }
 
-    // Latest first
-    journals.reverse();
+    function renderStats(journals) {
+        const statsBar = document.getElementById('statsBar');
+        if (journals.length === 0) { statsBar.style.display = 'none'; return; }
+        statsBar.style.display = 'flex';
+        document.getElementById('statTotal').textContent = journals.length;
+        const totalGratitude = journals.reduce((sum, j) => sum + (j.gratitude ? j.gratitude.length : 0), 0);
+        document.getElementById('statGratitude').textContent = totalGratitude;
+        const uniqueDays = new Set(journals.map(j => j.date)).size;
+        document.getElementById('statDays').textContent = uniqueDays;
+    }
 
-    container.innerHTML = journals.map(j => `
-        <div class="glass-card" style="margin-bottom:20px;">
-            <h3>${new Date(j.timestamp).toLocaleString()}</h3>
-            <p><strong>What drained you:</strong><br>${j.drained || "—"}</p>
-            <p style="margin-top:10px;"><strong>Better tomorrow:</strong><br>${j.better || "—"}</p>
-        </div>
-    `).join("");
-}
+    function renderEntries(journals) {
+        const container = document.getElementById('journalList');
 
-loadJournals();
+        if (journals.length === 0 && allJournals.length === 0) {
+            container.innerHTML = `
+                <div class="empty-journal">
+                    <span class="empty-journal-icon">✍️</span>
+                    <p>No journal entries yet.</p>
+                    <small>Start writing in the main app — your reflections will appear here.</small>
+                    <br><br>
+                    <a href="index.html" class="btn btn-primary" style="display:inline-block; text-decoration:none; margin-top:12px;">Go to MindMate →</a>
+                </div>
+            `;
+            return;
+        }
+
+        if (journals.length === 0 && allJournals.length > 0) {
+            container.innerHTML = `<div class="no-results">🔍 No entries match your search.</div>`;
+            return;
+        }
+
+        const sorted = [...journals].reverse();
+        container.innerHTML = sorted.map((j, idx) => {
+            const date = new Date(j.timestamp);
+            const dateStr = date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            const timeStr = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            const realIdx = allJournals.length - 1 - (journals === allJournals ? idx : allJournals.indexOf(j));
+            const actualIdx = allJournals.indexOf(j);
+
+            const gratitudeTags = j.gratitude && j.gratitude.length > 0
+                ? `<div class="entry-section">
+                    <div class="entry-section-label">🌻 Gratitude</div>
+                    <div class="gratitude-tags">
+                        ${j.gratitude.map(g => `<span class="gratitude-tag">${escapeHtml(g)}</span>`).join('')}
+                    </div>
+                   </div>`
+                : '';
+
+            const drainedSection = j.drained
+                ? `<div class="entry-section">
+                    <div class="entry-section-label">💧 What drained you</div>
+                    <div class="entry-section-text">${escapeHtml(j.drained)}</div>
+                   </div>`
+                : '';
+
+            const betterSection = j.better
+                ? `<div class="entry-section">
+                    <div class="entry-section-label">🌱 Better tomorrow</div>
+                    <div class="entry-section-text">${escapeHtml(j.better)}</div>
+                   </div>`
+                : '';
+
+            return `
+                <div class="journal-entry" id="entry-${actualIdx}">
+                    <div class="entry-header">
+                        <div>
+                            <div class="entry-date">${dateStr}</div>
+                            <div class="entry-time">${timeStr}</div>
+                        </div>
+                        <button class="delete-btn" onclick="deleteEntry(${actualIdx})" title="Delete this entry" aria-label="Delete entry">🗑</button>
+                    </div>
+                    ${drainedSection}
+                    ${betterSection}
+                    ${gratitudeTags}
+                </div>
+            `;
+        }).join('');
+    }
+
+    function filterEntries() {
+        const query = document.getElementById('searchInput').value.toLowerCase().trim();
+        if (!query) {
+            renderEntries(allJournals);
+            return;
+        }
+        const filtered = allJournals.filter(j => {
+            const text = [j.drained, j.better, ...(j.gratitude || [])].join(' ').toLowerCase();
+            return text.includes(query);
+        });
+        renderEntries(filtered);
+    }
+
+    function deleteEntry(index) {
+        if (!confirm('Delete this journal entry? This cannot be undone.')) return;
+        allJournals.splice(index, 1);
+        localStorage.setItem('mindmate_journals', JSON.stringify(allJournals));
+        const entry = document.getElementById(`entry-${index}`);
+        if (entry) {
+            entry.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            entry.style.opacity = '0';
+            entry.style.transform = 'scale(0.96)';
+            setTimeout(() => loadJournals(), 350);
+        } else {
+            loadJournals();
+        }
+    }
+
+    function escapeHtml(str) {
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    loadJournals();
 </script>
 
 </body>

@@ -1,6 +1,6 @@
 // ==================== MINDMATE INTRO CONTROLLER ====================
 // Production-quality onboarding animation system
-// Handles timing, transitions, and localStorage persistence
+// Handles timing, transitions, localStorage persistence, and redirect to main app
 
 (function() {
   'use strict';
@@ -9,12 +9,13 @@
   
   const INTRO_CONFIG = {
     localStorageKey: 'mindmate_seen_intro',
+    redirectUrl: 'index.html',
     timing: {
-      logoDisplay: 1800,        // How long logo shows
-      slideDisplay: 1200,       // How long each feature slide shows
-      slideTransition: 600,     // Slide fade in/out duration
-      finalDelay: 400,          // Delay before final screen
-      fadeOutDuration: 600      // Intro fade out duration
+      logoDisplay: 1800,
+      slideDisplay: 1200,
+      slideTransition: 600,
+      finalDelay: 400,
+      fadeOutDuration: 600
     },
     slides: [
       {
@@ -30,7 +31,12 @@
       {
         icon: '🧘',
         title: 'Calm your mind',
-        description: 'Guided exercises for peace and clarity'
+        description: 'Guided breathing exercises for peace and clarity'
+      },
+      {
+        icon: '🌻',
+        title: 'Stay grateful',
+        description: 'Daily gratitude practice to shift your perspective'
       }
     ]
   };
@@ -76,6 +82,13 @@
     animationTimeouts = [];
   }
 
+  /**
+   * Redirect to main app
+   */
+  function redirectToApp() {
+    window.location.href = INTRO_CONFIG.redirectUrl;
+  }
+
   // ==================== DOM MANIPULATION ====================
 
   /**
@@ -84,14 +97,6 @@
    */
   function getIntroContainer() {
     return document.getElementById('mindmate-intro');
-  }
-
-  /**
-   * Get main app container element
-   * @returns {HTMLElement|null}
-   */
-  function getAppContainer() {
-    return document.getElementById('app-container');
   }
 
   /**
@@ -172,58 +177,29 @@
   }
 
   /**
-   * Handle intro completion
+   * Handle intro completion — fade out then redirect to index.html
    */
   function completeIntro() {
     if (isAnimating) return;
     isAnimating = true;
 
-    // Mark as seen
+    // Mark as seen so next time user goes straight to index.html
     markIntroAsSeen();
 
     // Clear any pending animations
     clearAnimationTimeouts();
 
-    // Fade out intro
+    // Fade out intro then redirect
     const introContainer = getIntroContainer();
     if (introContainer) {
       introContainer.classList.add('intro-fade-out');
 
-      // Remove intro and show app after fade
       setTimeout(() => {
-        hideIntro();
-        showApp();
-        isAnimating = false;
+        redirectToApp();
       }, INTRO_CONFIG.timing.fadeOutDuration);
-    }
-  }
-
-  /**
-   * Hide intro container
-   */
-  function hideIntro() {
-    const introContainer = getIntroContainer();
-    if (introContainer) {
-      introContainer.classList.add('intro-hidden');
-    }
-  }
-
-  /**
-   * Show main app container
-   */
-  function showApp() {
-    const appContainer = getAppContainer();
-    if (appContainer) {
-      appContainer.classList.remove('intro-hidden');
-      // Optional: Add fade-in animation to app
-      appContainer.style.opacity = '0';
-      appContainer.style.transform = 'scale(0.98)';
-      
-      requestAnimationFrame(() => {
-        appContainer.style.transition = 'opacity 600ms cubic-bezier(0.4, 0.0, 0.2, 1), transform 600ms cubic-bezier(0.4, 0.0, 0.2, 1)';
-        appContainer.style.opacity = '1';
-        appContainer.style.transform = 'scale(1)';
-      });
+    } else {
+      // Fallback: just redirect
+      redirectToApp();
     }
   }
 
@@ -253,24 +229,16 @@
    * Initialize intro animation
    */
   function initIntro() {
-    // Check if we should show intro
+    // If intro was already seen, skip straight to the main app
     if (!shouldShowIntro()) {
-      hideIntro();
-      showApp();
+      redirectToApp();
       return;
-    }
-
-    // Ensure app is hidden initially
-    const appContainer = getAppContainer();
-    if (appContainer) {
-      appContainer.classList.add('intro-hidden');
     }
 
     // Attach event listeners
     attachEventListeners();
 
-    // Start animation sequence
-    // Small delay to ensure DOM is ready and animations trigger properly
+    // Start animation sequence with a small delay
     setTimeout(() => {
       showLogo();
     }, 100);
@@ -282,7 +250,7 @@
   function resetIntro() {
     try {
       localStorage.removeItem(INTRO_CONFIG.localStorageKey);
-      console.log('Intro reset - reload page to see it again');
+      console.log('Intro reset — reload intro.html to see it again');
     } catch (e) {
       console.warn('Could not reset intro:', e);
     }
@@ -290,7 +258,6 @@
 
   // ==================== PUBLIC API ====================
 
-  // Expose functions to window for external use
   window.MindMateIntro = {
     shouldShowIntro: shouldShowIntro,
     init: initIntro,
@@ -300,7 +267,6 @@
 
   // ==================== AUTO-INITIALIZE ====================
 
-  // Initialize when DOM is ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initIntro);
   } else {
